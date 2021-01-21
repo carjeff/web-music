@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buct.music.dao.SongMapper">
+    <resultMap id="BaseResultMap" type="com.buct.music.domin.Song">
+        <id column="id" jdbcType="BIGINT" javaType="Long" property="id" />
+        <result column="singer_id" jdbcType="BIGINT" javaType="Long" property="singerId" />
+        <result column="name" jdbcType="VARCHAR" javaType="String" property="name" />
+        <result column="pic" jdbcType="VARCHAR" javaType="String" property="pic" />
+        <result column="url" jdbcType="VARCHAR" javaType="String" property="url" />
+        <result column="introduction" jdbcType="VARCHAR" javaType="String" property="introduction" />
+        <result column="create_time" jdbcType="BIGINT" javaType="Long" property="createTime" />
+        <result column="update_time" jdbcType="BIGINT" javaType="Long" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="ResultMapWithSingerName" type="com.buct.music.controller.dto.SongReq">
+        <id column="id" jdbcType="BIGINT" javaType="Long" property="id" />
+        <result column="singer_id" jdbcType="BIGINT" javaType="Long" property="singerId" />
+        <result column="name" jdbcType="VARCHAR" javaType="String" property="name" />
+        <result column="singer_name" jdbcType="VARCHAR" javaType="String" property="singerName" />
+        <result column="pic" jdbcType="VARCHAR" javaType="String" property="pic" />
+        <result column="url" jdbcType="VARCHAR" javaType="String" property="url" />
+        <result column="introduction" jdbcType="VARCHAR" javaType="String" property="introduction" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, singer_id, name, pic, url, introduction, create_time, update_time
+    </sql>
+
+    <sql id="Column_List_With_Singer_Name">
+        song.id, song.singer_id, song.name, singer.name as singer_name, song.pic, song.url, song.introduction
+    </sql>
+
+    <insert id="insert" parameterType="com.buct.music.domin.Song">
+        insert into song
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="singerId != null">
+                singer_id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="pic != null">
+                pic,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="introduction != null">
+                introduction,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix=" values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="singerId != null">
+                #{singerId},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="pic != null">
+                #{pic},
+            </if>
+            <if test="url != null">
+                #{url},
+            </if>
+            <if test="introduction != null">
+                #{introduction},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.buct.music.domin.Song">
+        update song
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="singerId != null">
+                singer_id = #{singerId},
+            </if>
+            <if test="pic != null">
+                pic = #{pic},
+            </if>
+            <if test="url != null">
+                url = #{url},
+            </if>
+            <if test="introduction != null">
+                introduction = #{introduction},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from song
+        where id = #{id}
+    </delete>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from song
+        where id = #{id}
+    </select>
+
+    <select id="selectAllSongs" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from song
+    </select>
+
+    <select id="selectAllSongsWithSingerName" resultMap="ResultMapWithSingerName">
+        select
+        <include refid="Column_List_With_Singer_Name" />
+        from song, singer
+        where song.singer_id = singer.id
+    </select>
+
+    <select id="selectByName" resultMap="ResultMapWithSingerName" parameterType="java.lang.String">
+        select
+        <include refid="Column_List_With_Singer_Name" />
+        from song, singer
+        where song.singer_id = singer.id and song.name like #{name}
+    </select>
+
+    <select id="selectByIntroduction" resultMap="ResultMapWithSingerName" parameterType="java.lang.String">
+        select
+        <include refid="Column_List_With_Singer_Name" />
+        from song, singer
+        where song.singer_id = singer.id and song.introduction like #{keyword}
+    </select>
+
+    <select id="selectBySinger" resultMap="ResultMapWithSingerName" parameterType="java.lang.Long">
+        select
+        <include refid="Column_List_With_Singer_Name" />
+        from song, singer
+        where song.singer_id = singer.id and singer.id = #{singerId}
+    </select>
+</mapper>

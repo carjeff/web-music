@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buct.music.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="com.buct.music.domin.User">
+        <id column="id" jdbcType="BIGINT" javaType="Long" property="id" />
+        <result column="username" jdbcType="VARCHAR" javaType="String" property="username" />
+        <result column="password" jdbcType="VARCHAR" javaType="String" property="password" />
+        <result column="sex" jdbcType="TINYINT" javaType="Boolean" property="sex" />
+        <result column="phone_num" jdbcType="CHAR" javaType="String" property="phoneNumber" />
+        <result column="email" jdbcType="CHAR" javaType="String" property="email" />
+        <result column="birth" jdbcType="DATE" javaType="Date" property="birth" />
+        <result column="introduction" jdbcType="VARCHAR" javaType="String" property="introduction" />
+        <result column="location" jdbcType="VARCHAR" javaType="String" property="location" />
+        <result column="avator" jdbcType="VARCHAR" javaType="String" property="avator" />
+        <result column="create_time" jdbcType="BIGINT" javaType="Long" property="createTime" />
+        <result column="update_time" jdbcType="BIGINT" javaType="Long" property="updateTime" />
+    </resultMap>
+
+    <sql id="Base_Column">
+        id, username, password, sex, phone_num, email, birth, introduction, location, avator, create_time, update_time
+    </sql>
+    <insert id="insert" parameterType="com.buct.music.domin.User">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="phoneNumber != null">
+                phone_num,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="birth != null">
+                birth,
+            </if>
+            <if test="introduction != null">
+                introduction,
+            </if>
+            <if test="location != null">
+                location,
+            </if>
+            <if test="avator != null">
+                avator,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix=" values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="username != null">
+                #{username},
+            </if>
+            <if test="password != null">
+                #{password},
+            </if>
+            <if test="sex != null">
+                #{sex},
+            </if>
+            <if test="phoneNumber != null">
+                #{phoneNumber},
+            </if>
+            <if test="email != null">
+                #{email},
+            </if>
+            <if test="birth != null">
+                #{birth},
+            </if>
+            <if test="introduction != null">
+                #{introduction},
+            </if>
+            <if test="location != null">
+                #{location},
+            </if>
+            <if test="avator != null">
+                #{avator},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectUserById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column"></include>
+        from user
+        where id = #{id}
+    </select>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        delete
+        from user
+        where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="com.buct.music.domin.User">
+        update user
+        <set>
+            <if test="username !=null">
+                username = #{username},
+            </if>
+            <if test="password !=null">
+                password = #{password},
+            </if>
+            <if test="sex !=null">
+                sex = #{sex},
+            </if>
+            <if test="phoneNumber !=null">
+                phone_num = #{phoneNumber},
+            </if>
+            <if test="email !=null">
+                email = #{email},
+            </if>
+            <if test="birth !=null">
+                birth = #{birth},
+            </if>
+            <if test="introduction !=null">
+                introduction = #{introduction},
+            </if>
+            <if test="avator !=null">
+                avator = #{avator},
+            </if>
+            <if test="location !=null">
+                location = #{location},
+            </if>
+            <if test="createTime !=null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime !=null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectAllUsers" resultMap="BaseResultMap">
+        select *
+        from user
+    </select>
+
+    <select id="selectUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+        from user
+        where username like #{username}
+    </select>
+
+    <select id="verifyPassword" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where username = #{uesrname} and password = #{password}
+    </select>
+</mapper>

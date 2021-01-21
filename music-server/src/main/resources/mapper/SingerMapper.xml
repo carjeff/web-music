@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.buct.music.dao.SingerMapper">
+    <resultMap id="BaseResultMap" type="com.buct.music.domin.Singer">
+        <id column="id" jdbcType="BIGINT" javaType="Long" property="id" />
+        <result column="name" jdbcType="VARCHAR" javaType="String" property="name" />
+        <result column="sex" jdbcType="TINYINT" javaType="Integer" property="sex" />
+        <result column="pic" jdbcType="VARCHAR" javaType="String" property="pic" />
+        <result column="birth" jdbcType="DATE" javaType="Date" property="birth" />
+        <result column="location" jdbcType="VARCHAR" javaType="String" property="location" />
+        <result column="introduction" jdbcType="VARCHAR" javaType="String" property="introduction" />
+        <result column="create_time" jdbcType="BIGINT" javaType="Long" property="createTime" />
+        <result column="update_time" jdbcType="BIGINT" javaType="Long" property="updateTime" />
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id, name, sex, pic, birth, location, introduction, create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.buct.music.domin.Singer">
+        insert into singer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="pic != null">
+                pic,
+            </if>
+            <if test="birth != null">
+                birth,
+            </if>
+            <if test="location != null">
+                location,
+            </if>
+            <if test="introduction != null">
+                introduction,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix=" values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="sex != null">
+                #{sex},
+            </if>
+            <if test="pic != null">
+                #{pic},
+            </if>
+            <if test="birth != null">
+                #{birth},
+            </if>
+            <if test="location != null">
+                #{location},
+            </if>
+            <if test="introduction != null">
+                #{introduction},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.buct.music.domin.Singer">
+        update singer
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="pic != null">
+                pic = #{pic},
+            </if>
+            <if test="birth != null">
+                birth = #{birth},
+            </if>
+            <if test="location != null">
+                location = #{location},
+            </if>
+            <if test="introduction != null">
+                introduction = #{introduction},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    
+    <delete id="delete" parameterType="java.util.List">
+        delete from singer where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from singer
+        where id = #{id}
+    </select>
+    
+    <select id="selectAllSinger" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from singer
+    </select>
+
+    <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List" />
+        from singer
+        where name like #{name}
+    </select>
+
+    <select id="selectBySex" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List" />
+        from singer
+        where sex = #{sex}
+    </select>
+    
+    <select id="getSingerId" resultType="java.lang.Long" parameterType="java.lang.String">
+        select id from singer where name = #{name}
+    </select>
+</mapper>
